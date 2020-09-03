@@ -1,6 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useContext } from "react";
+import { UserDispatch } from "../App";
 
-function User({ user, onRemove, onToggle }) {
+function User({ user }) {
+  const dispatch = useContext(UserDispatch);
+
   const styleEm = {
     cursor: "pointer",
     color: user.active ? "green" : "black"
@@ -8,11 +11,16 @@ function User({ user, onRemove, onToggle }) {
 
   return (
     <div>
-      <b style={styleEm} onClick={() => onToggle(user.id)}>
+      <b
+        style={styleEm}
+        onClick={() => dispatch({ type: "TOGGLE_USER", id: user.id })}
+      >
         {user.username}
       </b>{" "}
       <span>({user.email})</span>
-      <button onClick={() => onRemove(user.id)}>삭제</button>
+      <button onClick={() => dispatch({ type: "REMOVE_USER", id: user.id })}>
+        삭제
+      </button>
     </div>
   );
 }
@@ -21,12 +29,7 @@ function UserList({ users, onRemove, onToggle }) {
   return (
     <div>
       {users.map(user => (
-        <User
-          key={user.id}
-          user={user}
-          onRemove={onRemove}
-          onToggle={onToggle}
-        />
+        <User key={user.id} user={user} />
       ))}
     </div>
   );
